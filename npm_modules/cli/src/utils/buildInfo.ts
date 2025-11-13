@@ -51,7 +51,9 @@ async function getDeviceChoice(platform: string): Promise<string> {
 
 export async function getBuildInfo(argv: ArgumentsResolver<CommandParameters>, bazel: BazelClient, checkDevice: boolean): Promise<BuildInfo> {
   const platform = argv.getArgument('platform') as PLATFORM;
-  const forDevice = !!argv.getArgument('simulator');
+  // When --simulator is passed we are NOT building for a physical device
+  // so invert the presence of the simulator flag.
+  const forDevice = !argv.getArgument('simulator');
 
   let selectedDevice: string | undefined;
   let architectures: Architecture[] = ALL_ARCHITECTURES;
